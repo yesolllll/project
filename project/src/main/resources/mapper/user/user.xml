@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+
+	<sql id="userWhere">
+		<where>
+			<if test="sval != null and sval != ''">
+				<if test="stype == 'all'">
+					id LIKE '%${sval}%' OR name LIKE '%${sval}%'
+				</if>
+				<if test="stype != 'all'">
+					${stype} LIKE '%${sval}%'
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectAll" resultType="user.UserVO" parameterType="user.UserVO">
+		SELECT * FROM user
+		<include refid="userWhere"/>
+		ORDER BY ${orderby} ${direct}
+		LIMIT ${startIdx},${pageRow}
+	</select>
+	
+	<select id="count" resultType="int" parameterType="user.UserVO">
+		SELECT COUNT(*) FROM user
+		<include refid="userWhere"/>
+	</select>
+	
+	<select id="detail" resultType="user.UserVO" parameterType="user.UserVO">
+		SELECT * FROM user WHERE no = #{no}
+	</select>
+	
+	<insert id="insert" parameterType="user.UserVO">
+		INSERT INTO user (id, pwd, name, email, tel, zipcode, addr1, addr2, regdate)
+		VALUES (#{id}, md5(#{pwd}), #{name}, #{email}, #{tel}, #{zipcode}, #{addr1}, #{addr2}, NOW())
+	</insert>
+	
+	<update id="update" parameterType="user.UserVO">
+		UPDATE user SET
+			pwd=md5(#{pwd}), email=#{email}
+			, tel=#{tel} , zipcode=#{zipcode}
+			, addr1=#{addr1} , addr2=#{addr2}
+		WHERE no=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="user.UserVO">
+		DELETE FROM user WHERE no=#{no}
+	</delete>
+	
+	<select id="isDuplicateId"  resultType="int" parameterType="String">
+	SELECT COUNT(*) FROM user WHERE id=#{id} <!-- 파라미터는 무슨 컬럼이든 상관없음 -->
+	</select>
+	
+	<select id="login"  resultType="user.UserVO" parameterType="user.UserVO">
+	SELECT * FROM user WHERE id=#{id} AND pwd=md5(#{pwd})
+	</select>
+	
+</mapper>

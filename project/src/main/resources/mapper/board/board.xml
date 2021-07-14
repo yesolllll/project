@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="board">
+	
+	<!-- 반복되는 명령문  -->
+	<sql id="boardWhere">
+	<where>
+			<if test="sval != null and sval != ''">
+				<if test="stype =='all'">
+				title LIKE '%${sval}%' OR content LIKE '%${sval}%'
+				</if>
+				<if test="stype !='all'">
+				${stype} LIKE '%${sval}%'
+				</if>
+				
+			<!--  위와 같은 쿼리 	
+				<if test="stype =='title'">
+				title LIKE '%${sval}%'
+				</if>
+				<if test="stype =='content'">
+				content LIKE '%${sval}%'
+				</if> -->
+			</if>
+			<if test="user_no != 0">
+				AND user_no=#{user_no}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectAll" resultType="board.BoardVO" parameterType="board.BoardVO" >
+	SELECT *, (SELECT name FROM user WHERE NO=board.user_no) as name FROM board
+		<include refid="boardWhere"></include>
+	ORDER BY ${orderby} ${direct}
+	limit ${startIdx},${pageRow}
+	</select>
+	
+	<select id="count" resultType="int" parameterType="board.BoardVO">
+	SELECT count(*) FROM board
+	<include refid="boardWhere"></include>
+	</select>
+	
+	<select id="detail" resultType="board.BoardVO" parameterType="board.BoardVO">
+	SELECT * FROM board WHERE no =#{no}
+	</select>
+	
+	<update id="updateReadcount" parameterType="board.BoardVO">
+	UPDATE board SET readcount=readcount+1 WHERE no = #{no}
+	</update>
+	
+	<insert id="insert" parameterType="board.BoardVO">
+	INSERT INTO board(title, content, regdate, readcount, filename_org, filename_real, user_no)
+	VALUES (#{title}, #{content}, NOW(), 0, #{filename_org}, #{filename_real}, #{user_no})
+	</insert>
+	
+	<update id="update" parameterType="board.BoardVO">
+	UPDATE board SET
+	title = #{title}, content=#{content}
+	<if test="filename_org != null">   <!-- 파일이 존재하면 변경안함 -->
+	, filename_org =#{filename_org}, filename_real=#{filename_real}
+	</if>   
+	WHERE no=#{no}
+	</update>
+	
+	<!-- <첨부파일 삭제> -->
+	<update id="delFilename" parameterType="board.BoardVO">
+	UPDATE board SET
+	filename_org ='', filename_real=''
+	WHERE no=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="board.BoardVO">
+	DELETE FROM board
+	WHERE no=#{no}
+	</delete>
+	</mapper>
+	

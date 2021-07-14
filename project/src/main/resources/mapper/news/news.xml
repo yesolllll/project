@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="news">
+	
+	<!-- 반복되는 명령문  -->
+	<sql id="newsWhere">
+	<where>
+			<if test="sval != null and sval != ''">
+				<if test="stype =='all'">
+				title LIKE '%${sval}%' OR content LIKE '%${sval}%'
+				</if>
+				<if test="stype !='all'">
+				${stype} LIKE '%${sval}%'
+				</if>
+				
+			<!--  위와 같은 쿼리 	
+				<if test="stype =='title'">
+				title LIKE '%${sval}%'
+				</if>
+				<if test="stype =='content'">
+				content LIKE '%${sval}%'
+				</if> -->
+				
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectAll" resultType="news.NewsVO" parameterType="news.NewsVO" >
+	SELECT * FROM news
+		<include refid="newsWhere"></include>
+	ORDER BY ${orderby} ${direct}
+	limit ${startIdx},${pageRow}
+	</select>
+	
+	<select id="count" resultType="int" parameterType="news.NewsVO">
+	SELECT count(*) FROM news
+	<include refid="newsWhere"></include>
+	</select>
+	
+	<select id="detail" resultType="news.NewsVO" parameterType="news.NewsVO">
+	SELECT * FROM news WHERE no =#{no}
+	</select>
+	
+	<update id="updateReadcount" parameterType="news.NewsVO">
+	UPDATE news SET readcount=readcount+1 WHERE no = #{no}
+	</update>
+	
+	<insert id="insert" parameterType="news.NewsVO">
+	INSERT INTO news(title, content, regdate, readcount, filename_org, filename_real)
+	VALUES (#{title}, #{content}, NOW(), 0, #{filename_org}, #{filename_real})
+	</insert>
+	
+	<update id="update" parameterType="news.NewsVO">
+	UPDATE news SET
+	title = #{title}, content=#{content}
+	<if test="filename_org != null">   <!-- 파일이 존재하면 변경안함 -->
+	, filename_org =#{filename_org}, filename_real=#{filename_real}
+	</if>   
+	WHERE no=#{no}
+	</update>
+	
+	<!-- <첨부파일 삭제> -->
+	<update id="delFilename" parameterType="news.NewsVO">
+	UPDATE news SET
+	filename_org ='', filename_real=''
+	WHERE no=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="news.NewsVO">
+	DELETE FROM news
+	WHERE no=#{no}
+	</delete>
+	</mapper>
+	
