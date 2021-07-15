@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import board.BoardService;
@@ -112,12 +113,45 @@ public class UserController {
 		model.addAttribute("url","/project/board/index.do");
 		return "include/alert";
 	}
-	
+
+	/* 내가 쓴 글 보기 */
 	@RequestMapping("/user/mypage.do")
-	public String mypage(Model model, BoardVO vo, HttpSession sess) {
+	public String mypage(Model model, BoardVO vo, HttpSession sess) { /* 여기만 boardVO임 잘 확인하셈 */
 	vo.setUser_no(((UserVO)sess.getAttribute("userInfo")).getNo());
 	model.addAttribute("list", boardservice.selectAll(vo));
 	return "user/mypage";
+	}
+	
+	/* 아이디 찾기 */
+	@RequestMapping(value = "/user/searchId.do", method = RequestMethod.GET)
+	public String searchId(Model model, UserVO vo) {  /* vo필요 x */
+		return "user/searchId";
+	}
+	@RequestMapping(value = "/user/searchId.do", method = RequestMethod.POST)
+	public String searchId2(Model model, UserVO vo) {  /* vo필요 */
+		UserVO uv = service.searchId(vo);			  /* 이름과 이메일을 맞게 넣었으면 값이 들어있고 아니라면 null */
+		String id ="";
+		if(uv != null) {
+			id= uv.getId();
+		}
+		model.addAttribute("result",id);  		
+		return "include/result";
+	}
+	
+	/* 비밀번호 찾기 */
+	@RequestMapping(value = "/user/searchPwd.do", method = RequestMethod.GET)
+	public String searchPwd(Model model, UserVO vo) {  /* vo필요 x */
+		return "user/searchPwd";
+	}
+	@RequestMapping(value = "/user/searchPwd.do", method = RequestMethod.POST)
+	public String searchPwd2(Model model, UserVO vo) {  /* vo필요 x */
+		UserVO uv = service.searchPwd(vo);
+		if(uv != null){
+			model.addAttribute("result", "ok");
+		}else {
+			model.addAttribute("result", "no"); 
+		}
+		return "include/result";
 	}
 	
 //	@RequestMapping("/board/edit.do")

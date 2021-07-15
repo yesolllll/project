@@ -39,7 +39,20 @@ public class UserDAO {
 	public int isDuplicateId(String id) {
 		return sqlSession.selectOne("user.isDuplicateId",id);
 	}
+	
 	public UserVO login(UserVO vo) {
 		return sqlSession.selectOne("user.login", vo);
+	}
+	
+	public UserVO searchId(UserVO vo) {
+		return sqlSession.selectOne("user.searchId", vo);
+	}
+	
+	public UserVO searchPwd(UserVO vo) {
+		return sqlSession.selectOne("user.searchPwd", vo);
+	}
+
+	public int updateTempPwd(UserVO vo) {
+		return sqlSession.update("user.updateTempPwd", vo);
 	}
 }

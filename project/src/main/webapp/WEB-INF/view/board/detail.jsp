@@ -29,13 +29,16 @@
                         </div>
                         <div class="cont"><p>${vo.content }</p> </div>
                         
-                        <dl class="file">
-                            <dt>첨부파일 </dt>
-                            <dd>
-                            <a href="/project/common/download.jsp?path=/upload/&org=${vo.filename_org }&real=${vo.filename_real}"  
-                            target="_blank">첨부파일.pptx [38.07KB] </a></dd>
-                        </dl>
-                                    
+                        <c:if test="${!empty vo.filename_org}">  <!-- ←파일이 저장된 경우에만 첨부파일 있다고 출력 -->
+                        	<dl class="file">
+                            	<dt>첨부파일 </dt>
+                            	<dd>
+                            	<a href="/project/common/download.jsp?path=/upload/&org=${vo.filename_org }&real=${vo.filename_real}"  
+                            	target="_blank">첨부파일.pptx [38.07KB] </a>
+                            	</dd>
+                        	</dl>
+                         </c:if>         
+                        
                         <div class="btnSet clear">
                             <div class="fl_l"><a href="index.do?reqPage=${param.reqPage}&stype=${param.stype}&sval=${param.sval}&orderby=${param.orderby}&direct=${param.direct}" class="btn">목록으로</a></div>
                             <c:if test="${userInfo.no == vo.user_no}">

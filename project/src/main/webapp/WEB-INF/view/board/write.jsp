@@ -38,7 +38,7 @@
     
                 <div class="bbs">
                 <form method="post" name="frm" id="frm" action="insert.do" enctype="multipart/form-data" >
-                 <input type="hidden"  name="user_no" value="${userInfo.no}">
+                 <input type="hidden"  name="user_no" value="${userInfo.no}">  <!-- usercontroller에서 login처리중 session에 login한 회원의 정보를 userInfo라는 이름으로 저장 -->
                     <table class="board_write">
                         <tbody>
                         <tr>

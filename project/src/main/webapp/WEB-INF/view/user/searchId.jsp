@@ -10,48 +10,54 @@
     <meta name="format-detection" content="telephone=no, address=no, email=no">
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <title>로그인</title>
+    <title>아이디 찾기</title>
 <%-- 아래와 같이 쓰이지만 결과값은 다름<%@ include file="/WEB-INF/view/include/head.jsp" %> 실행문 가져옴 --%>
 <%--                         <jsp:include page="/WEB-INF/view/include/head.jsp"/> 결과값 가져옴--%>
 				<c:import url="/WEB-INF/view/include/head.jsp"/> <!-- 결과값가져옴 -->
 	<script>
-	function loginCheck() {
-		if($("#id").val().trim()==""){
-			alert('아이디를 입력해 주세요')
-			$("#id").focus();
-			return false;
-		}
-		
-		if($("#pwd").val().trim()==""){
-			alert('비밀번호를 입력해 주세요')
-			$("#pwd").focus();
-			return false;
-		}
+	function searchId() {
+		$.ajax({
+			url: 'searchId.do',
+			method:'post',
+			data:{
+				name: $("#name").val(),
+				email: $("#email").val()
+			},
+			success:function(res){
+				//console.log(res)
+				if(res.trim()==''){
+					$("#msg").text('아이디가 존재하지 않습니다.')
+				}else{
+					$("#msg").text('아이디는 "'+res.trim()+'"입니다')
+				}
+			}
+		});
+		return false;
 	}
 	</script>
 </head>
 <body>
     <div class="wrap">
         <%@ include file="/WEB-INF/view/include/top.jsp" %>						
-        <form action="login.do" method="post" id="board1" name="board1" onsubmit="return loginCheck();"><!-- header에서 id="board"이미 사용중이라서 board2로 함 -->
+        <form action="" method="post" id="board1" name="board1" onsubmit="return searchId();"><!-- header에서 id="board"이미 사용중이라서 board2로 함 -->
             <div class="sub">
                 <div class="size">
-                    <h3 class="sub_title">로그인</h3>
+                    <h3 class="sub_title">아이디 찾기 :)</h3>
                     
                     <div class="member">
                         <div class="box">
                             <fieldset class="login_form">
                                 <ul>
-                                    <li><input type="text" id="id" name="id" placeholder="아이디" value="${userVO.id }"></li>
-                                    <li><input type="password" id="pwd" name="pwd" placeholder="비밀번호"></li>
-                                    <li><label><input type="checkbox" name="checkId" id="reg1" value="check"<c:if test="${!empty userVO.id}">checked</c:if>/>아이디저장</label></li>
+                                    <li><input type="text" id="name" name="name" placeholder="이름" ></li>
+                                    <li><input type="text" id="email" name="email" placeholder="이메일"></li>
+                                    <li id="msg"></li>
                                 </ul>
-                                <div class="login_btn"><input type="submit" value="로그인" alt="로그인" /></div>
+                                <div class="login_btn"><input type="submit" value="아이디 찾기" alt="아이디 찾기" /></div>
                             </fieldset>
                             <div class="btnSet clear">
                                 <div>
-                                    <a href="join.do" class="btn">회원가입</a> 
-                                    <a href="searchId.do" class="btn">이메일/비밀번호 찾기</a>
+                                    <a href="searchId.do" class="btn">아이디 찾기</a> 
+                                    <a href="searchPwd.do" class="btn">비밀번호 찾기</a>
                                 </div>
                             </div>
                         </div>

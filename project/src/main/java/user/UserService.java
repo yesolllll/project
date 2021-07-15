@@ -11,5 +11,7 @@ public interface UserService {
 	int delete(UserVO vo);
 	int isDuplicateId(String id);
 	UserVO login(UserVO vo);
+	UserVO searchId(UserVO vo);
+	UserVO searchPwd(UserVO vo);
 	
 }

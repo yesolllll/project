@@ -47,7 +47,7 @@
 	<delete id="delete" parameterType="user.UserVO">
 		DELETE FROM user WHERE no=#{no}
 	</delete>
-	
+	<!-- 아이디 중복확인 -->
 	<select id="isDuplicateId"  resultType="int" parameterType="String">
 	SELECT COUNT(*) FROM user WHERE id=#{id} <!-- 파라미터는 무슨 컬럼이든 상관없음 -->
 	</select>
@@ -55,5 +55,20 @@
 	<select id="login"  resultType="user.UserVO" parameterType="user.UserVO">
 	SELECT * FROM user WHERE id=#{id} AND pwd=md5(#{pwd})
 	</select>
+	
+	<!-- 아이디 찾기(이름, 이메일) -->
+	<select id="searchId"  resultType="user.UserVO" parameterType="user.UserVO">
+	SELECT * FROM user WHERE name=#{name} AND email=#{email}
+	</select>
+	<!-- 비밀번호 찾기 (아이디,이메일) -->
+	<select id="searchPwd"  resultType="user.UserVO" parameterType="user.UserVO">
+	SELECT * FROM user WHERE id=#{id} AND email=#{email}
+	</select>
+	<!-- 임시비밀번호로 수정 -->
+	<update id="updateTempPwd" parameterType="user.UserVO">
+	UPDATE user SET
+		   pwd=md5(#{pwd}) 
+	WHERE id=#{id} AND email=#{email}
+	</update>
 	
 </mapper>
