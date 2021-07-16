@@ -25,7 +25,34 @@
 			alert('로그인 후 사용가능합니다.')
 		</c:if>
 	}
-</script>
+	
+	//삭제하는 법
+	function isDell(no) {
+		
+		if (confirm('삭제하시겠습니까?')) {
+			// 삭제처리
+			$.ajax({
+				url:'delete.do',
+				method:'post',
+				data: {
+					no:no
+				},
+				success:function(res) {
+					console.log(res);
+					if (res.trim() == 'true') {
+						alert('정상적으로 삭제되었습니다.');
+						location.href='index.do';
+					} else {
+						alert('삭제 실패');
+					}
+				},
+				error : function(res) {
+					
+				}
+			});
+		}
+	}
+	</script>
 </head>
 <body>
 	<div class="wrap">
@@ -48,6 +75,7 @@
 							<col width="100px" />
 							<col width="100px" />
 							<col width="80px" />
+							<col width="20" />
 						</colgroup>
 						<thead>
 							<tr>
@@ -56,6 +84,7 @@
 								<th>작성자</th>
 								<th>작성일</th>
 								<th>조회수</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -67,12 +96,17 @@
 
 							<c:forEach var="vo" items="${list}">
 								<tr>
-									<td>${vo.no }</td>
+									<td>${vo.no}</td>
 									<td class="txt_l"><a href="detail.do?no=${vo.no}&reqPage=${boardVO.reqPage }&stype=${boardVO.stype}&sval=${boardVO.sval}&orderby=${boardVO.orderby}&direct=${boardVO.direct}">
-											${vo.title}</a></td>
+											${vo.title} [${commentVO.count}]</a></td>
 									<td class="writer">${vo.name}</td>
 									<td class="date">${vo.regdate}</td>
 									<td>${vo.readcount}</td>
+									<%-- <c:if test=""> --%>
+										<td class="btnSet"  style="text-align:right;">
+		                       		<a class="btn" href="javascript: isDell(${vo.no});" id="delete_btn">X </a>
+		                    	  </td>
+		                    	  <%-- </c:if> --%>
 								</tr>
 							</c:forEach>
 						</tbody>

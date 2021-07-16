@@ -3,7 +3,6 @@ package board;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,23 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import comment.CommentService;
+import comment.CommentVO;
+
 @Controller
 public class BoardController {
 	
 	@Autowired
 	BoardService service;
+	@Autowired
+	CommentService cService;
+	
+	static final String TABLENAME="board";
 	
 	@RequestMapping("/board/index.do")
-	public String index(Model model, BoardVO vo) {
+	public String index(Model model, BoardVO vo, CommentVO cv) {
 	model.addAttribute("list", service.selectAll(vo));
 	
 	return "board/index";
 	}
 	
 	@RequestMapping("/board/detail.do")
-	public String detail(Model model, BoardVO vo) {
+	public String detail(Model model, BoardVO vo, CommentVO cv) {
 		model.addAttribute("vo",service.detail(vo));
-	
+		 /*
+			commentList로 이동
+			cv.setBoard_no(vo.getNo()); cv.setTablename(TABLENAME);
+			model.addAttribute("list", cService.selectAll(cv));
+		 */
 	return "board/detail";
 	}
 	
@@ -117,6 +127,25 @@ public class BoardController {
 	}
 	
 	return "include/result";
+	}
+	
+	@RequestMapping("/comment/insert.do")            						
+	public String commentInsert(Model model, CommentVO vo) {
+		vo.setTablename(TABLENAME);  //jsp에서 수정하는것봐 여기서 저.장
+		int r = cService.insert(vo);
+		if(r>0) {
+			model.addAttribute("result","true");
+		}else {
+			model.addAttribute("result","false");
+		}
+		return "include/result";
+	}
+	
+	@RequestMapping("/comment/list.do")            						
+	public String commentList(Model model, CommentVO vo) {
+		vo.setTablename(TABLENAME);  //jsp에서 수정하는것봐 여기서 저.장
+		model.addAttribute("list", cService.selectAll(vo));
+		return "include/comment";
 	}
 	
 }

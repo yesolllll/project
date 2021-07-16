@@ -15,10 +15,16 @@ public class BoardVO extends CommonVO {
 	private String filename_real;	// 서버에 저장된 실제파일명
 	private String isDel;
 	private int user_no;
-	
 	private String name;
-
+	private int count;
 	
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public String getName() {
 		return name;
 	}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comment">
+	
+	<select id="selectAll" resultType="comment.CommentVO" parameterType="comment.CommentVO">
+		<!-- 댓글에도 작성자가 나와야하기때문에 userno가져오는 스칼라 서브쿼리 있어야함. -->
+		SELECT *, (SELECT name From user WHERE no=comment.user_no) AS name FROM comment 
+		<!-- 마이페이지의 내가쓴 댓글은 밑 where 쿼리문이 아니고 'where userno=#{userno}'로 작성해야함. -->
+		WHERE board_no = #{board_no} AND tablename=#{tablename}		
+		ORDER BY regdate DESC 
+		LIMIT ${startIdx},${pageRow}
+	</select>
+	
+	<select id="count" resultType="int" parameterType="comment.CommentVO">
+		SELECT COUNT(*), (SELECT count(*) FROM board WHERE no=comment.board_no) FROM comment		
+		WHERE board_no = #{board_no} AND tablename=#{tablename} 
+	</select>
+		
+	<insert id="insert" parameterType="comment.CommentVO">
+		INSERT INTO comment (content, regdate, board_no, user_no, tablename)
+		VALUES (#{content}, NOW(), #{board_no}, #{user_no}, #{tablename})
+	</insert>
+			
+	<delete id="delete" parameterType="comment.CommentVO">
+		DELETE FROM comment WHERE no=#{no}
+	</delete>
+	
+</mapper>
