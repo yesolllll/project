@@ -30,14 +30,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</sql>
 	
 	<select id="selectAll" resultType="board.BoardVO" parameterType="board.BoardVO" >
-	SELECT *, (SELECT name FROM user WHERE NO=board.user_no) as name FROM board
+	SELECT  *, 
+	(SELECT name FROM user WHERE no=board.user_no) AS name,
+	(SELECT count(*) FROM comment WHERE board_no=board.no) AS comment_count
+	FROM board
 		<include refid="boardWhere"></include>
 	ORDER BY ${orderby} ${direct}
 	limit ${startIdx},${pageRow}
 	</select>
 	
 	<select id="count" resultType="int" parameterType="board.BoardVO">
-	SELECT count(*) FROM board
+	SELECT count(*)  FROM board
 	<include refid="boardWhere"></include>
 	</select>
 	

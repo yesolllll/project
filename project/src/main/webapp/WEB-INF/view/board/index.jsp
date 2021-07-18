@@ -98,15 +98,15 @@
 								<tr>
 									<td>${vo.no}</td>
 									<td class="txt_l"><a href="detail.do?no=${vo.no}&reqPage=${boardVO.reqPage }&stype=${boardVO.stype}&sval=${boardVO.sval}&orderby=${boardVO.orderby}&direct=${boardVO.direct}">
-											${vo.title} [${commentVO.count}]</a></td>
+											${vo.title} [${vo.comment_count}]</a></td>
 									<td class="writer">${vo.name}</td>
 									<td class="date">${vo.regdate}</td>
 									<td>${vo.readcount}</td>
-									<%-- <c:if test=""> --%>
-										<td class="btnSet"  style="text-align:right;">
-		                       		<a class="btn" href="javascript: isDell(${vo.no});" id="delete_btn">X </a>
-		                    	  </td>
-		                    	  <%-- </c:if> --%>
+									<c:if test="${vo.user_no == userInfo.no }">
+									<td class="btnSet"  style="text-align:right;">
+		                       			<a class="btn" href="javascript: isDell(${vo.no});" id="delete_btn">X </a>
+		                    	    </td>
+		                    	  </c:if>
 								</tr>
 							</c:forEach>
 						</tbody>

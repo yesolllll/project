@@ -30,7 +30,6 @@ public class BoardController {
 	@RequestMapping("/board/index.do")
 	public String index(Model model, BoardVO vo, CommentVO cv) {
 	model.addAttribute("list", service.selectAll(vo));
-	
 	return "board/index";
 	}
 	
@@ -147,5 +146,5 @@ public class BoardController {
 		model.addAttribute("list", cService.selectAll(vo));
 		return "include/comment";
 	}
-	
+
 }

@@ -16,15 +16,17 @@ public class BoardVO extends CommonVO {
 	private String isDel;
 	private int user_no;
 	private String name;
-	private int count;
+	private int comment_count;
 	
 	
-	public int getCount() {
-		return count;
+	public int getComment_count() {
+		return comment_count;
 	}
-	public void setCount(int count) {
-		this.count = count;
+
+	public void setComment_count(int comment_count) {
+		this.comment_count = comment_count;
 	}
+
 	public String getName() {
 		return name;
 	}
