@@ -32,8 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectAll" resultType="board.BoardVO" parameterType="board.BoardVO" >
 	SELECT  *, 
 	(SELECT name FROM user WHERE no=board.user_no) AS name,
-	(SELECT count(*) FROM comment WHERE board_no=board.no) AS comment_count
-	FROM board
+	(SELECT count(*) FROM comment WHERE board_no=board.no AND tablename='board') AS comment_count
+	FROM board												<!-- ↑안쓰면 다른 tablename의 댓글수가 적용이 되어버림 / 모든 테이블마다 적용-->
 		<include refid="boardWhere"></include>
 	ORDER BY ${orderby} ${direct}
 	limit ${startIdx},${pageRow}

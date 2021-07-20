@@ -57,7 +57,7 @@
                     <ul class="depth2">
                         <li><a href="/project/board/index.do">게시판</a></li>
                         <li><a href="/project/news/index.do">뉴스</a></li>
-                        <li><a href="">MENU5-3</a></li>
+                        <li><a href="/project/reply/index.do">답변게시판</a></li>
                     </ul>
                 </li>
             </ul>
