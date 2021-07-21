@@ -9,4 +9,5 @@ public interface BoardService {
 	BoardVO edit(BoardVO vo);
 	int update(BoardVO vo);
 	int delete(BoardVO vo);
+	int deleteGroup(BoardVO vo);
 }

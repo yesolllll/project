@@ -42,4 +42,7 @@ public class BoardDAO {
 	public int delete(BoardVO vo) {
 		return sqlSession.delete("board.delete",vo);
 	}
+	public int deleteGroup(BoardVO vo) {
+		return sqlSession.delete("board.deleteGroup",vo);
+	}
 }

@@ -59,4 +59,9 @@ public class BoardServiceImpl  implements BoardService{
 	public int delete(BoardVO vo) {   	
 		return dao.delete(vo);		
 	}
+
+	@Override
+	public int deleteGroup(BoardVO vo) {
+		return dao.deleteGroup(vo);
+	}
 }

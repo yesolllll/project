@@ -18,7 +18,16 @@ public class BoardVO extends CommonVO {
 	private String name;
 	private int comment_count;
 	
+	private int[] nos;  //관리자 게시물 삭제시 배열사용
 	
+	public int[] getNos() {
+		return nos;
+	}
+
+	public void setNos(int[] nos) {
+		this.nos = nos;
+	}
+
 	public int getComment_count() {
 		return comment_count;
 	}
